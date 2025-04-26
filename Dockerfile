@@ -11,5 +11,5 @@ RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Optional: define start command
+# Optional: Add a default start command
 # CMD ["python", "main.py"]
