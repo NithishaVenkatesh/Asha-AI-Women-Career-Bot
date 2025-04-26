@@ -4,12 +4,11 @@ WORKDIR /app
 
 COPY . /app/
 
-RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
-    python -m venv /opt/venv && \
+RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install --upgrade pip && \
     /opt/venv/bin/pip install -r requirements.txt
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Optional: Add a default start command
+# Example start command (change to your app's main file if needed)
 # CMD ["python", "main.py"]
