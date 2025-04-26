@@ -1,0 +1,68 @@
+/* Upload Progress Styles */
+.upload-progress {
+    display: none;
+    margin: 10px 0;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.file-preview {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.file-preview i {
+    margin-right: 8px;
+    color: #666;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #333;
+}
+
+.progress-bar {
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0;
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.error-message {
+    display: none;
+    color: #d32f2f;
+    background: #ffebee;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Improve file input button styling */
+.custom-file-upload {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #2196F3;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background: #1976D2;
+}
+
+#resume-upload {
+    display: none;
+} 

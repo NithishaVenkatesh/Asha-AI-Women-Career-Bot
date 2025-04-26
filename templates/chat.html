@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASHA - Your Career Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="static/Screenshot 2025-04-26 145953.png">
+    <style>
+        :root {
+            --primary-color: #9C27B0;
+            --primary-light: #BA68C8;
+            --primary-dark: #7B1FA2;
+            --background-light: #F8F6FF;
+            --background-dark: #232136;
+            --chat-bg: #FFFFFF;
+            --chat-bg-dark: #2A273F;
+            --text-color: #2D3748;
+            --text-light: #718096;
+            --border-color: #E2E8F0;
+            --shadow-color: rgba(156, 39, 176, 0.08);
+            --pill-bg: #F3E8FF;
+            --pill-bg-dark: #3B3757;
+            --pill-active: #9C27B0;
+            --pill-active-dark: #BA68C8;
+        }
+        html, body {
+            height: 100%;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #F8F6FF 0%, #F3E8FF 100%);
+            color: var(--text-color);
+            font-family: 'Poppins', 'Inter', 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background 0.5s, color 0.5s;
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, #232136 0%, #3B3757 100%);
+            color: #fff;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 2rem 0.5rem 2rem;
+            background: transparent;
+            position: relative;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .header-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+        .header-logo img {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+        }
+        .header-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+        .header-wave {
+            position: absolute;
+            left: 0; right: 0; bottom: -8px;
+            height: 18px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .header-wave svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            animation: waveGlow 2.5s infinite alternate;
+        }
+        @keyframes waveGlow {
+            0% { filter: drop-shadow(0 0 0px #BA68C8); }
+            100% { filter: drop-shadow(0 0 12px #BA68C8); }
+        }
+        .dark-mode .header-logo {
+            background: #2A273F;
+        }
+        .dark-mode .header-title {
+            color: #fff;
+        }
+        .dark-mode .header-wave svg {
+            filter: drop-shadow(0 0 12px #9C27B0);
+        }
+        .dark-toggle {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 0.5rem;
+            transition: background 0.3s;
+        }
+        .dark-toggle:hover, .dark-toggle:focus {
+            background: var(--pill-bg);
+            outline: none;
+        }
+        .dark-mode .dark-toggle {
+            color: #fff;
+            background: var(--pill-bg-dark);
+        }
+        /* Sticky pill menu */
+        .pill-menu {
+            display: flex;
+            gap: 0.7rem;
+            overflow-x: auto;
+            padding: 0.7rem 2rem 0.7rem 2rem;
+            background: transparent;
+            position: sticky;
+            top: 0.5rem;
+            z-index: 10;
+            scrollbar-width: none;
+        }
+        .pill-menu::-webkit-scrollbar { display: none; }
+        .pill-btn {
+            background: var(--pill-bg);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 2rem;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+        .pill-btn:hover, .pill-btn:focus {
+            background: var(--primary-color);
+            color: #fff;
+            box-shadow: 0 4px 16px #BA68C8;
+        }
+        .dark-mode .pill-btn {
+            background: var(--pill-bg-dark);
+            color: #fff;
+        }
+        .dark-mode .pill-btn:hover, .dark-mode .pill-btn:focus {
+            background: var(--primary-light);
+            color: #fff;
+        }
+        /* Chat area */
+        .chat-main {
+            max-width: 600px;
+            margin: 2.5rem auto 0 auto;
+            padding: 0 1rem 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 1.1rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 1.08rem;
+            font-weight: 500;
+            box-shadow: 0 2px 12px var(--shadow-color);
+            margin-bottom: 0.2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInBubble 0.5s forwards;
+        }
+        .chat-bubble.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #BA68C8 0%, #9C27B0 100%);
+            color: #fff;
+            border-bottom-right-radius: 0.5rem;
+        }
+        .chat-bubble.bot {
+            align-self: flex-start;
+            background: var(--chat-bg);
+            color: var(--text-color);
+            border-bottom-left-radius: 0.5rem;
+            position: relative;
+        }
+        .dark-mode .chat-bubble.bot {
+            background: var(--chat-bg-dark);
+            color: #fff;
+        }
+        @keyframes fadeInBubble {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .bot-avatar-bubble {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            left: -44px;
+            top: 0.5rem;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            background: #fff;
+        }
+        .dark-mode .bot-avatar-bubble {
+            background: #2A273F;
+        }
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-left: 0.5rem;
+            margin-top: 0.2rem;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            animation: typing 1.2s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+        /* Input area */
+        .input-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+        }
+        .chat-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 2rem;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            border: 2px solid transparent;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        .chat-input:focus-within {
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 0 4px #e1c6f7;
+        }
+        .dark-mode .chat-input {
+            background: #2A273F;
+        }
+        #user-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 1rem 1.2rem;
+            font-size: 1.1rem;
+            border-radius: 2rem;
+            outline: none;
+            color: var(--text-color);
+            font-family: inherit;
+        }
+        .dark-mode #user-input {
+            color: #fff;
+        }
+        .upload-button {
+            background: var(--primary-light);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            position: relative;
+        }
+        .upload-button:hover, .upload-button:focus {
+            background: var(--primary-color);
+            box-shadow: 0 4px 16px #BA68C8;
+            outline: none;
+        }
+        .upload-button input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        #send-button {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+        #send-button:hover, #send-button:focus {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 16px #BA68C8;
+            outline: none;
+        }
+        /* Responsive */
+        @media (max-width: 700px) {
+            .chat-header, .pill-menu {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .chat-main, .input-container {
+                max-width: 100%;
+                padding-left: 0.2rem;
+                padding-right: 0.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-header">
+        <div class="header-left">
+            <div class="header-logo">
+                <img src="static/Screenshot 2025-04-26 145953.png" alt="Asha Logo">
+            </div>
+            <span class="header-title">Asha</span>
+        </div>
+        <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+        <div class="header-wave">
+            <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 20 Q360 40 720 20 T1440 20 V40 H0 V20Z" fill="#BA68C8" fill-opacity="0.12"/>
+            </svg>
+        </div>
+    </div>
+    <div class="pill-menu" id="pillMenu">
+        <button class="pill-btn" onclick="sendQuickMessage('job listings')">Job Listings</button>
+        <button class="pill-btn" onclick="sendQuickMessage('events')">Events</button>
+        <button class="pill-btn" onclick="sendQuickMessage('mentorship')">Mentorship</button>
+        <button class="pill-btn" onclick="sendQuickMessage('resume tips')">Resume Tips</button>
+        <button class="pill-btn" onclick="sendQuickMessage('interview preparation')">Interview Prep</button>
+    </div>
+    <div class="chat-main" id="chat-container">
+        <div class="welcome-message chat-bubble bot" style="opacity:1;transform:none;">
+            Hello lovely! A very warm welcome to you! I'm Asha 🌸, your friendly career companion here, brought to you by the wonderful JobsForHer Foundation.<br><br>
+            It's truly my pleasure to support amazing women like you on your unique professional journeys. Whether you're dreaming about your first job, thinking of returning to work after a break, seeking inspiring mentorship, looking for ways to learn new skills, or searching for that perfect next step in your career growth, I'm here to help you navigate and discover wonderful opportunities ✨.<br><br>
+            What brings you here today? Please feel free to share what's on your mind – perhaps the kind of role you're interested in, your career goals, or any questions you might have. I'm here to listen and help you blossom! 🌷 How can I best support you today? 😊
+        </div>
+    </div>
+    <div class="input-container">
+        <form class="chat-input" id="chatForm" autocomplete="off" onsubmit="return false;">
+            <input type="text" id="user-input" placeholder="Type your message here..." aria-label="Type your message here...">
+            <button type="button" class="upload-button" aria-label="Upload file">
+                <i class="fas fa-paperclip"></i>
+                <input type="file" id="file-upload" accept=".pdf,.doc,.docx,.txt">
+            </button>
+            <button id="send-button" aria-label="Send message">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+    <script>
+        // Dark mode toggle
+        const darkToggle = document.getElementById('darkToggle');
+        darkToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkToggle.innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        // File upload handling
+        const fileUpload = document.getElementById('file-upload');
+        fileUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Show file name in chat
+            addMessage(`Uploading file: ${file.name}`, true);
+            
+            const formData = new FormData();
+            formData.append('resume', file);
+
+            try {
+                const response = await fetch('/upload-resume', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                addMessage(data.response, false);
+            } catch (error) {
+                addMessage("Sorry, there was an error uploading your file. Please try again.", false);
+            }
+
+            // Reset file input
+            e.target.value = '';
+        });
+
+        // Chat logic (preserve existing functionality)
+        const chatContainer = document.getElementById('chat-container');
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        let isBotTyping = false;
+
+        function sendQuickMessage(topic) {
+            userInput.value = `Tell me about ${topic}`;
+            handleSendMessage();
+        }
+
+        function addMessage(message, isUser = false) {
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble ' + (isUser ? 'user' : 'bot');
+            if (!isUser) {
+                // Add bot avatar for bot messages
+                const avatar = document.createElement('img');
+                avatar.src = 'static/Screenshot 2025-04-26 145953.png';
+                avatar.alt = 'Asha';
+                avatar.className = 'bot-avatar-bubble';
+                bubble.appendChild(avatar);
+            }
+            // Message content
+            const content = document.createElement('span');
+            content.innerHTML = message;
+            bubble.appendChild(content);
+            chatContainer.appendChild(bubble);
+            setTimeout(() => {
+                bubble.style.opacity = 1;
+                bubble.style.transform = 'none';
+            }, 10);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chat-bubble bot';
+            typingDiv.style.opacity = 1;
+            typingDiv.style.transform = 'none';
+            typingDiv.innerHTML = `<img src="static/Screenshot 2025-04-26 145953.png" alt="Asha" class="bot-avatar-bubble"><span class="typing-indicator"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></span>`;
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return typingDiv;
+        }
+
+        async function handleSendMessage() {
+            const message = userInput.value.trim();
+            if (!message || isBotTyping) return;
+            addMessage(message, true);
+            userInput.value = '';
+            userInput.disabled = true;
+            sendButton.disabled = true;
+            isBotTyping = true;
+            // Show typing indicator
+            const typingDiv = showTypingIndicator();
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message }),
+                });
+                const data = await response.json();
+                typingDiv.remove();
+                addMessage(data.response, false);
+            } catch (error) {
+                typingDiv.remove();
+                addMessage("Sorry, I'm having trouble connecting right now. Please try again later.", false);
+            } finally {
+                userInput.disabled = false;
+                sendButton.disabled = false;
+                isBotTyping = false;
+                userInput.focus();
+            }
+        }
+
+        chatForm.addEventListener('submit', handleSendMessage);
+        sendButton.addEventListener('click', handleSendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+            }
+        });
+        userInput.addEventListener('focus', function() {
+            this.parentElement.classList.add('focus');
+        });
+        userInput.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focus');
+        });
+        // Auto-resize textarea (if you switch to textarea)
+        // userInput.addEventListener('input', function() {
+        //     this.style.height = 'auto';
+        //     this.style.height = (this.scrollHeight) + 'px';
+        // });
+        userInput.focus();
+    </script>
+</body>
+</html> 
