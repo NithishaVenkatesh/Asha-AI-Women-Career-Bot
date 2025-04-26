@@ -4,13 +4,12 @@ WORKDIR /app
 
 COPY . /app/
 
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
     python -m venv /opt/venv && \
     /opt/venv/bin/pip install --upgrade pip && \
     /opt/venv/bin/pip install -r requirements.txt
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# If you have a main.py or app.py, set your start command later in Railway
-# Example:
+# Optional: define start command
 # CMD ["python", "main.py"]
