@@ -1,12 +1,9 @@
 FROM python:3.11-slim
 
-# (optional but good)
 WORKDIR /app
 
-# Copy your code
-COPY . /app/.
+COPY . /app/
 
-# Install deps
 RUN --mount=type=cache,target=/root/.cache/pip \
     python -m venv /opt/venv && \
     /opt/venv/bin/pip install --upgrade pip && \
@@ -14,4 +11,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Then continue your build...
+# If you have a main.py or app.py, set your start command later in Railway
+# Example:
+# CMD ["python", "main.py"]
