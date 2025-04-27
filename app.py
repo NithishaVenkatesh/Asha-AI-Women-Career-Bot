@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from asha import AshaBot
 import json
 import re
@@ -12,6 +12,9 @@ from langdetect import detect
 
 app = Flask(__name__)
 bot = AshaBot()
+app.secret_key = 'your_secret_key_here'  # Set a secret key for session management
+
+print("Flask app is starting...")
 
 # Configure upload folder
 UPLOAD_FOLDER = 'uploads'
@@ -281,6 +284,28 @@ def detect_language():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/auth', methods=['GET', 'POST'])
+def auth_page():
+    if session.get('user_email'):
+        return redirect(url_for('chat_page'))
+    if request.method == 'POST':
+        google_email = request.form.get('google_email')
+        if google_email:
+            session['user_email'] = google_email
+            return redirect(url_for('chat_page'))
+        email = request.form.get('email')
+        password = request.form.get('password')
+        # For demo, accept any email/password. In production, validate against DB.
+        if email and password:
+            session['user_email'] = email
+            return redirect(url_for('chat_page'))
+    return render_template('auth.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('auth_page'))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

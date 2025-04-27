@@ -401,4 +401,8 @@ body {
     width: 100% !important;
     margin: 0 auto !important;
     box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
 } 

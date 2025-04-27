@@ -604,6 +604,37 @@
             outline: 2px solid var(--primary-dark);
             outline-offset: 2px;
         }
+
+        .chat-wrapper {
+            max-width: 900px;
+            height: 90vh;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: transparent;
+        }
+        .chat-main {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 2.5rem 1rem 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .input-container {
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.9rem 1.5rem;
+            background: rgba(255,255,255,0.85);
+            box-shadow: 0 4px 32px 0 rgba(156, 39, 176, 0.10), 0 -2px 16px rgba(156, 39, 176, 0.07);
+            border-radius: 2.2rem;
+            border: 1.5px solid #e2e8f0;
+            backdrop-filter: blur(8px);
+        }
     </style>
 </head>
 <body>
@@ -613,7 +644,7 @@
                 <div class="logo-icon">
                     <i class="fas fa-tv"></i>
                 </div>
-                <div class="logo-text">Asha AI</div>
+                <div class="logo-text">Asha</div>
             </div>
 
             <h1 class="hero-title" style="font-size:3.7rem;line-height:1.08;font-weight:800;margin-bottom:1.7rem;">
@@ -622,7 +653,7 @@
             <p class="hero-subtitle" style="font-size:1.25rem;color:#7a7e8c;margin-bottom:2.7rem;max-width:650px;">
                 Guiding women professionals with personalized career advice, job opportunities, mentorship connections, and professional development resources.
             </p>
-            <a href="/chat" class="start-button" style="font-size:1.35rem;font-weight:700;padding:1.1rem 2.8rem;border-radius:18px;background:#9C27B0;box-shadow:none;">
+            <a href="/auth" class="start-button" style="font-size:1.1rem;font-weight:700;padding:0.85rem 2rem;border-radius:14px;background:#9C27B0;box-shadow:none;">
                 Start Chatting <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -773,5 +804,14 @@
             </div>
         </div>
     </footer>
+
+    <div class="chat-wrapper">
+        <div class="chat-main" id="chat-container">
+            <!-- chat bubbles here -->
+        </div>
+        <div class="input-container">
+            <!-- input bar here -->
+        </div>
+    </div>
 </body>
 </html> 

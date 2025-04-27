@@ -27,6 +27,7 @@
         }
         html, body {
             height: 100%;
+            overflow-x: hidden;
         }
         body {
             min-height: 100vh;
@@ -45,9 +46,12 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1.2rem 2rem 0.5rem 2rem;
+            padding: 0.6rem 1.2rem 0.3rem 1.2rem;
             background: transparent;
-            position: relative;
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+            background: inherit;
         }
         .header-left {
             display: flex;
@@ -74,18 +78,27 @@
             font-weight: 600;
             letter-spacing: 0.01em;
         }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+            background: inherit;
+        }
         .header-wave {
             position: absolute;
-            left: 0; right: 0; bottom: -8px;
+            left: 0;
+            right: 0;
+            bottom: -8px;
+            width: 100vw;
             height: 18px;
             pointer-events: none;
             z-index: 1;
+            overflow: hidden;
         }
         .header-wave svg {
-            width: 100%;
+            width: 100vw;
             height: 100%;
             display: block;
-            animation: waveGlow 2.5s infinite alternate;
         }
         @keyframes waveGlow {
             0% { filter: drop-shadow(0 0 0px #BA68C8); }
@@ -121,17 +134,29 @@
         /* Sticky pill menu */
         .pill-menu {
             display: flex;
+            flex-wrap: nowrap;
             gap: 0.7rem;
             overflow-x: auto;
-            padding: 0.7rem 2rem 0.7rem 2rem;
+            white-space: nowrap;
+            padding: 0.4rem 1.2rem 0.4rem 1.2rem;
             background: transparent;
-            position: sticky;
-            top: 0.5rem;
-            z-index: 10;
-            scrollbar-width: none;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch; /* Smooth touch scroll on iOS */
+            overscroll-behavior-x: contain;
         }
-        .pill-menu::-webkit-scrollbar { display: none; }
+        .pill-menu::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
         .pill-btn {
+            flex: 0 0 auto;
+            min-width: 120px;
+            text-align: center;
+            scroll-snap-align: start;
+            user-select: none;
+            -webkit-user-drag: none;
+            touch-action: pan-x;
             background: var(--pill-bg);
             color: var(--primary-color);
             border: none;
@@ -158,25 +183,62 @@
             color: #fff;
         }
         /* Chat area */
+        .chat-wrapper {
+            max-width: 100vw;
+            height: 90vh;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: transparent;
+            margin-top: 0;
+        }
         .chat-main {
-            max-width: 600px;
-            margin: 2.5rem auto 0 auto;
-            padding: 0 1rem 2rem 1rem;
+            flex: 1 1 auto;
+            overflow-y: auto;
+            padding: 2.5rem 1rem 2rem 1rem;
             display: flex;
             flex-direction: column;
             gap: 1.2rem;
+            margin-bottom: 0;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            scroll-behavior: smooth;
+        }
+        .chat-main::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
         }
         .chat-bubble {
-            max-width: 80%;
+            max-width: 95%;
             padding: 1.1rem 1.5rem;
             border-radius: 2rem;
-            font-size: 1.08rem;
+            font-size: 0.95rem;
             font-weight: 500;
             box-shadow: 0 2px 12px var(--shadow-color);
             margin-bottom: 0.2rem;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInBubble 0.5s forwards;
+            line-height: 1.7;
+        }
+        .chat-bubble span.highlight {
+            background: #f3e8ff;
+            color: #9C27B0;
+            font-weight: 600;
+            border-radius: 0.4em;
+            padding: 0.1em 0.4em;
+            margin: 0 0.1em;
+            display: inline-block;
+        }
+        .chat-bubble ul, .chat-bubble ol {
+            margin: 0.5em 0 0.5em 1.2em;
+            padding: 0;
+        }
+        .chat-bubble li {
+            margin-top: 8px;
+        }
+        .chat-bubble p + p, .chat-bubble ul + p, .chat-bubble p + ul {
+            margin-top: 8px;
         }
         .chat-bubble.user {
             align-self: flex-end;
@@ -190,6 +252,7 @@
             color: var(--text-color);
             border-bottom-left-radius: 0.5rem;
             position: relative;
+            margin-left: 44px;
         }
         .dark-mode .chat-bubble.bot {
             background: var(--chat-bg-dark);
@@ -238,14 +301,19 @@
         }
         /* Input area */
         .input-container {
+            max-width: 100vw;
             width: 100%;
-            max-width: 600px;
-            margin: 0 auto 2.5rem auto;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             gap: 0.7rem;
             padding: 0.5rem 1rem;
-            background: transparent;
+            background: rgba(255,255,255,0.85);
+            box-shadow: 0 4px 32px 0 rgba(156, 39, 176, 0.10), 0 -2px 16px rgba(156, 39, 176, 0.07);
+            border-radius: 2.2rem;
+            border: 1.5px solid #e2e8f0;
+            backdrop-filter: blur(8px);
+            position: static;
         }
         .chat-input {
             flex: 1;
@@ -268,8 +336,8 @@
             flex: 1;
             border: none;
             background: transparent;
-            padding: 1rem 1.2rem;
-            font-size: 1.1rem;
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
             border-radius: 2rem;
             outline: none;
             color: var(--text-color);
@@ -340,50 +408,65 @@
                 padding-right: 0.2rem;
             }
         }
+        .pill-menu {
+            position: static;
+        }
+        .job-link {
+            color: #9C27B0;
+            font-weight: 600;
+            text-decoration: underline;
+            margin-left: 0.5em;
+            transition: color 0.2s;
+        }
+        .job-link:hover {
+            color: #7B1FA2;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
-    <div class="chat-header">
-        <div class="header-left">
-            <div class="header-logo">
-                <img src="static/Screenshot 2025-04-26 145953.png" alt="Asha Logo">
+    <div class="sticky-header">
+        <div class="chat-header">
+            <div class="header-left">
+                <div class="header-logo">
+                    <img src="static/Screenshot 2025-04-26 145953.png" alt="Asha Logo">
+                </div>
+                <span class="header-title">Asha</span>
             </div>
-            <span class="header-title">Asha</span>
-        </div>
-        <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
-            <i class="fas fa-moon"></i>
-        </button>
-        <div class="header-wave">
-            <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 20 Q360 40 720 20 T1440 20 V40 H0 V20Z" fill="#BA68C8" fill-opacity="0.12"/>
-            </svg>
-        </div>
-    </div>
-    <div class="pill-menu" id="pillMenu">
-        <button class="pill-btn" onclick="sendQuickMessage('job listings')">Job Listings</button>
-        <button class="pill-btn" onclick="sendQuickMessage('events')">Events</button>
-        <button class="pill-btn" onclick="sendQuickMessage('mentorship')">Mentorship</button>
-        <button class="pill-btn" onclick="sendQuickMessage('resume tips')">Resume Tips</button>
-        <button class="pill-btn" onclick="sendQuickMessage('interview preparation')">Interview Prep</button>
-    </div>
-    <div class="chat-main" id="chat-container">
-        <div class="welcome-message chat-bubble bot" style="opacity:1;transform:none;">
-            Hello lovely! A very warm welcome to you! I'm Asha 🌸, your friendly career companion here, brought to you by the wonderful JobsForHer Foundation.<br><br>
-            It's truly my pleasure to support amazing women like you on your unique professional journeys. Whether you're dreaming about your first job, thinking of returning to work after a break, seeking inspiring mentorship, looking for ways to learn new skills, or searching for that perfect next step in your career growth, I'm here to help you navigate and discover wonderful opportunities ✨.<br><br>
-            What brings you here today? Please feel free to share what's on your mind – perhaps the kind of role you're interested in, your career goals, or any questions you might have. I'm here to listen and help you blossom! 🌷 How can I best support you today? 😊
-        </div>
-    </div>
-    <div class="input-container">
-        <form class="chat-input" id="chatForm" autocomplete="off" onsubmit="return false;">
-            <input type="text" id="user-input" placeholder="Type your message here..." aria-label="Type your message here...">
-            <button type="button" class="upload-button" aria-label="Upload file">
-                <i class="fas fa-paperclip"></i>
-                <input type="file" id="file-upload" accept=".pdf,.doc,.docx,.txt">
+            <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
             </button>
-            <button id="send-button" aria-label="Send message">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </form>
+            <div class="header-wave">
+                <svg viewBox="0 0 1440 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 20 Q360 40 720 20 T1440 20 V40 H0 V20Z" fill="#BA68C8" fill-opacity="0.12"/>
+                </svg>
+            </div>
+        </div>
+        <div class="pill-menu" id="pillMenu">
+            <!-- Pills will be rendered by JavaScript -->
+        </div>
+    </div>
+    <div class="chat-wrapper" style="max-width:900px;margin:0 auto;position:relative;">
+        <div class="chat-main" id="chat-container">
+            <div class="welcome-message chat-bubble bot" style="opacity:1;transform:none;">
+                <img src="static/Screenshot 2025-04-26 145953.png" alt="Asha" class="bot-avatar-bubble">
+                Hello lovely! A very warm welcome to you! I'm Asha 🌸, your friendly career companion here, brought to you by the wonderful JobsForHer Foundation.<br><br>
+                It's truly my pleasure to support amazing women like you on your unique professional journeys. Whether you're dreaming about your first job, thinking of returning to work after a break, seeking inspiring mentorship, looking for ways to learn new skills, or searching for that perfect next step in your career growth, I'm here to help you navigate and discover wonderful opportunities ✨.<br><br>
+                What brings you here today? Please feel free to share what's on your mind – perhaps the kind of role you're interested in, your career goals, or any questions you might have. I'm here to listen and help you blossom! 🌷 How can I best support you today? 😊
+            </div>
+        </div>
+        <div class="input-container">
+            <form class="chat-input" id="chatForm" autocomplete="off" onsubmit="return false;">
+                <input type="text" id="user-input" placeholder="Type your message here..." aria-label="Type your message here...">
+                <button type="button" class="upload-button" aria-label="Upload file">
+                    <i class="fas fa-paperclip"></i>
+                    <input type="file" id="file-upload" accept=".pdf,.doc,.docx,.txt">
+                </button>
+                <button id="send-button" aria-label="Send message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
     </div>
     <script>
         // Dark mode toggle
@@ -432,6 +515,31 @@
             handleSendMessage();
         }
 
+        // Format bot message: markdown-like to HTML
+        function formatBotMessage(text) {
+            // Convert **bold** to <span class="highlight">...</span>
+            text = text.replace(/\*\*(.+?)\*\*/g, '<span class="highlight">$1</span>');
+            // Convert * bullets to <li>...</li>
+            if (text.includes('* ')) {
+                text = text.replace(/(?:^|\n)\* (.+?)(?=\n|$)/g, '<li>$1</li>');
+                text = text.replace(/(<li>.*?<\/li>)+/gs, match => `<ul>${match}</ul>`);
+            }
+            // Convert [View Job](URL) markdown links to HTML
+            text = text.replace(
+                /\[View Job\]\((https?:\/\/[^\s)]+)\)/g,
+                '<a href="$1" target="_blank" rel="noopener noreferrer" class="job-link">View Job</a>'
+            );
+            // Replace any remaining raw URLs with 'View Job' links (but not if already inside a link)
+            text = text.replace(
+                /(?<!href=")(https?:\/\/[^\s]+)/g,
+                '<a href="$1" target="_blank" rel="noopener noreferrer" class="job-link">View Job</a>'
+            );
+            text = text.replace(/\n{2,}/g, '</p><p>');
+            text = text.replace(/\n/g, '<br>');
+            if (!/^<p>/.test(text)) text = '<p>' + text + '</p>';
+            return text;
+        }
+
         function addMessage(message, isUser = false) {
             const bubble = document.createElement('div');
             bubble.className = 'chat-bubble ' + (isUser ? 'user' : 'bot');
@@ -445,7 +553,11 @@
             }
             // Message content
             const content = document.createElement('span');
-            content.innerHTML = message;
+            if (!isUser) {
+                content.innerHTML = formatBotMessage(message);
+            } else {
+                content.textContent = message;
+            }
             bubble.appendChild(content);
             chatContainer.appendChild(bubble);
             setTimeout(() => {
@@ -466,6 +578,167 @@
             return typingDiv;
         }
 
+        // Dynamic Pills Logic
+        const defaultPills = [
+            { label: "Job Listings", action: "job listings" },
+            { label: "Events", action: "events" },
+            { label: "Mentorship", action: "mentorship" },
+            { label: "Resume Tips", action: "resume tips" },
+            { label: "Interview Prep", action: "interview preparation" },
+            { label: "Upskilling", action: "upskilling for women" },
+            { label: "Work-Life Balance", action: "work-life balance tips" },
+            { label: "Women in Tech", action: "women in tech" },
+            { label: "Leadership", action: "leadership for women" },
+            { label: "Returnee Programs", action: "programs for women returning to work" },
+            { label: "Salary Insights", action: "salary insights" },
+            { label: "Inspiration", action: "inspirational stories" },
+            { label: "Support Groups", action: "support groups for women" },
+            { label: "Community", action: "community for women" },
+            { label: "Explore More", action: "explore more opportunities" }
+        ];
+
+        // Helper: Ensure enough pills to fill the row
+        function ensureEnoughPills(pills) {
+            const minPillCount = Math.ceil(window.innerWidth / 140); // 140px per pill (including gap)
+            const fillerPills = [
+                { label: "Explore More", action: "explore more" },
+                { label: "Inspiration", action: "inspirational stories" },
+                { label: "Support", action: "support for women" },
+                { label: "Community", action: "community for women" },
+                { label: "Events", action: "events" },
+                { label: "Mentorship", action: "mentorship" }
+            ];
+            let i = 0;
+            while (pills.length < minPillCount) {
+                pills.push(fillerPills[i % fillerPills.length]);
+                i++;
+            }
+            return pills;
+        }
+
+        // Store last pills for resize
+        let currentPills = [];
+
+        function renderPills(pills) {
+            currentPills = [...pills];
+            pills = ensureEnoughPills([...pills]); // Fill if needed
+            const pillMenu = document.getElementById('pillMenu');
+            pillMenu.innerHTML = '';
+            pills.forEach(pill => {
+                const btn = document.createElement('button');
+                btn.className = 'pill-btn';
+                btn.textContent = pill.label;
+                btn.onclick = () => sendQuickMessage(pill.action);
+                pillMenu.appendChild(btn);
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            renderPills(currentPills);
+        });
+
+        function updatePillsForContext(message) {
+            message = message.toLowerCase();
+
+            if (/machine learning|ml/.test(message)) {
+                renderPills([
+                    { label: "Scope", action: "scope of machine learning for women" },
+                    { label: "Skills Needed", action: "skills needed for machine learning jobs" },
+                    { label: "Salary", action: "salary in machine learning for women" },
+                    { label: "Top Companies", action: "top companies hiring women in ML" },
+                    { label: "Courses", action: "courses for women in machine learning" },
+                    { label: "Work-Life Balance", action: "work-life balance in ML careers" },
+                    { label: "Women Leaders", action: "women leaders in machine learning" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            } else if (/career break|return to work/.test(message)) {
+                renderPills([
+                    { label: "Returnee Programs", action: "programs for women returning to work" },
+                    { label: "Resume Tips", action: "resume tips after a career break" },
+                    { label: "Confidence Building", action: "confidence after a break" },
+                    { label: "Mentorship", action: "mentorship for returnees" },
+                    { label: "Flexible Jobs", action: "flexible jobs for women" },
+                    { label: "Work-Life Balance", action: "work-life balance after a break" },
+                    { label: "Networking", action: "networking for returnees" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            } else if (/leadership|manager|promotion/.test(message)) {
+                renderPills([
+                    { label: "Leadership Skills", action: "leadership skills for women" },
+                    { label: "Mentorship", action: "mentorship for women leaders" },
+                    { label: "Salary Negotiation", action: "salary negotiation tips" },
+                    { label: "Breaking Barriers", action: "breaking barriers in leadership" },
+                    { label: "Work-Life Balance", action: "work-life balance for leaders" },
+                    { label: "Women Role Models", action: "women leaders in my field" },
+                    { label: "Promotion Tips", action: "tips for getting promoted" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            } else if (/resume|cv/.test(message)) {
+                renderPills([
+                    { label: "Upload Resume", action: "upload resume" },
+                    { label: "Resume Review", action: "review my resume" },
+                    { label: "Resume Tips", action: "resume tips" },
+                    { label: "ATS Friendly", action: "ATS friendly resume" },
+                    { label: "Career Gaps", action: "explain career gaps on resume" },
+                    { label: "Sample Resumes", action: "sample resumes for women" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            } else if (/work-life balance|stress|wellbeing|mental health/.test(message)) {
+                renderPills([
+                    { label: "Work-Life Tips", action: "work-life balance tips" },
+                    { label: "Remote Jobs", action: "remote jobs for women" },
+                    { label: "Flexible Hours", action: "flexible jobs for women" },
+                    { label: "Stress Management", action: "stress management for women" },
+                    { label: "Support Groups", action: "support groups for women" },
+                    { label: "Self-Care", action: "self-care tips" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            } else if (/upskill|course|learn|training/.test(message)) {
+                renderPills([
+                    { label: "Top Courses", action: "top courses for women" },
+                    { label: "Scholarships", action: "scholarships for women" },
+                    { label: "Online Learning", action: "online learning platforms" },
+                    { label: "Certifications", action: "certifications for women" },
+                    { label: "Career Change", action: "career change advice" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            } else if (/job|opportunit/.test(message)) {
+                renderPills([
+                    { label: "Job Listings", action: "job listings" },
+                    { label: "Apply for Jobs", action: "apply for jobs" },
+                    { label: "Job Alerts", action: "job alerts" },
+                    { label: "Saved Jobs", action: "saved jobs" },
+                    { label: "Recommended Jobs", action: "recommended jobs" },
+                    { label: "Company Reviews", action: "company reviews" },
+                    { label: "Salary Insights", action: "salary insights" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            } else if (/mentor|mentorship/.test(message)) {
+                renderPills([
+                    { label: "Find a Mentor", action: "find a mentor" },
+                    { label: "Mentorship Programs", action: "mentorship programs" },
+                    { label: "Peer Support", action: "peer support for women" },
+                    { label: "Networking", action: "networking for women" },
+                    { label: "Women Leaders", action: "women leaders in my field" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            } else {
+                // Default: a broad set of career-related pills
+                renderPills([
+                    { label: "Job Listings", action: "job listings" },
+                    { label: "Events", action: "events" },
+                    { label: "Mentorship", action: "mentorship" },
+                    { label: "Resume Tips", action: "resume tips" },
+                    { label: "Interview Prep", action: "interview preparation" },
+                    { label: "Upskilling", action: "upskilling for women" },
+                    { label: "Work-Life Balance", action: "work-life balance tips" },
+                    { label: "Women in Tech", action: "women in tech" },
+                    { label: "Leadership", action: "leadership for women" },
+                    { label: "Returnee Programs", action: "programs for women returning to work" },
+                    { label: "Back to Main", action: "main menu" }
+                ]);
+            }
+        }
         async function handleSendMessage() {
             const message = userInput.value.trim();
             if (!message || isBotTyping) return;
@@ -474,6 +747,8 @@
             userInput.disabled = true;
             sendButton.disabled = true;
             isBotTyping = true;
+            // Update pills based on user message
+            updatePillsForContext(message);
             // Show typing indicator
             const typingDiv = showTypingIndicator();
             try {
@@ -485,6 +760,8 @@
                 const data = await response.json();
                 typingDiv.remove();
                 addMessage(data.response, false);
+                // Update pills based on bot response
+                updatePillsForContext(data.response);
             } catch (error) {
                 typingDiv.remove();
                 addMessage("Sorry, I'm having trouble connecting right now. Please try again later.", false);
@@ -495,7 +772,6 @@
                 userInput.focus();
             }
         }
-
         chatForm.addEventListener('submit', handleSendMessage);
         sendButton.addEventListener('click', handleSendMessage);
         userInput.addEventListener('keypress', (e) => {

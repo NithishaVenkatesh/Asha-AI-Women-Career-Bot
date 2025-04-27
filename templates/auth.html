@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an Account | Asha</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #f3e8ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .auth-container {
+            background: #fff;
+            border-radius: 2rem;
+            box-shadow: 0 8px 32px rgba(156,39,176,0.10);
+            display: flex;
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .auth-left {
+            flex: 1 1 50%;
+            padding: 3rem 2.5rem 2.5rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #f3e8ff 100%);
+        }
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .auth-subtitle {
+            color: #7a7e8c;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .auth-form input {
+            padding: 0.9rem 1.2rem;
+            border-radius: 1.5rem;
+            border: 1.5px solid #e2e8f0;
+            font-size: 1rem;
+            outline: none;
+            background: #f9f9fb;
+            transition: border 0.2s;
+        }
+        .auth-form input:focus {
+            border: 1.5px solid #9C27B0;
+        }
+        .auth-form button[type="submit"] {
+            background: #FFD600;
+            color: #222;
+            font-weight: 600;
+            border: none;
+            border-radius: 1.5rem;
+            padding: 0.9rem 0;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .auth-form button[type="submit"]:hover {
+            background: #ffe066;
+        }
+        .auth-or {
+            text-align: center;
+            color: #aaa;
+            margin: 1.2rem 0 0.7rem 0;
+            font-size: 0.95rem;
+        }
+        .auth-social {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+        }
+        .auth-social button {
+            border: 1.5px solid #e2e8f0;
+            background: #fff;
+            border-radius: 1.5rem;
+            padding: 0.7rem 2.2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            transition: border 0.2s;
+        }
+        .auth-social button:hover {
+            border: 1.5px solid #9C27B0;
+        }
+        .auth-toggle {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.98rem;
+        }
+        .auth-toggle a {
+            color: #9C27B0;
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 0.3rem;
+        }
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+        .auth-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #9C27B0;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        .auth-logo i {
+            font-size: 1.7rem;
+        }
+        @media (max-width: 900px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 98vw;
+            }
+            .auth-left, .auth-right {
+                padding: 2rem 1.2rem;
+            }
+        }
+        .auth-right {
+            flex: 1 1 50%;
+            background: url('/static/auth-bg.jpg') center/cover no-repeat;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .auth-right .auth-img {
+            width: 90%;
+            max-width: 400px;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 32px rgba(156,39,176,0.10);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-left">
+            <div class="auth-logo">
+                <i class="fas fa-tv"></i> Asha
+            </div>
+            <div id="form-toggle-area">
+                <div class="auth-title" id="form-title">Create an account</div>
+                <div class="auth-subtitle" id="form-subtitle"></div>
+                <form class="auth-form" id="authForm" method="POST" action="/auth">
+                    <input type="text" id="fullname" name="fullname" placeholder="Full name" autocomplete="name" required style="display:block;">
+                    <input type="email" id="email" name="email" placeholder="Email" autocomplete="email" required>
+                    <input type="password" id="password" name="password" placeholder="Password" autocomplete="new-password" required>
+                    <input type="hidden" id="google_email" name="google_email">
+                    <button type="submit" id="submitBtn">Submit</button>
+                </form>
+                <div class="auth-or">or</div>
+                <div class="auth-social">
+                    <button type="button"><i class="fab fa-apple"></i> Apple</button>
+                    <button type="button" id="googleSignInBtn"><i class="fab fa-google"></i> Google</button>
+                </div>
+                <div class="auth-toggle" id="toggleText">
+                    Have any account? <a href="#" id="toggleLink">Sign in</a>
+                </div>
+                <div style="margin-top:1.2rem;font-size:0.92rem;text-align:center;">
+                    <a href="#" style="color:#7a7e8c;text-decoration:underline;">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+        <div class="auth-right">
+            <img src="static/Screenshot 2025-04-27 111938.png" alt="Professional Woman" class="auth-img">
+        </div>
+    </div>
+    <script>
+        // Toggle between sign up and sign in
+        const formTitle = document.getElementById('form-title');
+        const formSubtitle = document.getElementById('form-subtitle');
+        const fullnameInput = document.getElementById('fullname');
+        const toggleText = document.getElementById('toggleText');
+        const toggleLink = document.getElementById('toggleLink');
+        const authForm = document.getElementById('authForm');
+        let isSignUp = true;
+        toggleLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            isSignUp = !isSignUp;
+            if (isSignUp) {
+                formTitle.textContent = 'Create an account';
+                formSubtitle.textContent = '';
+                fullnameInput.style.display = 'block';
+                fullnameInput.required = true;
+                toggleText.innerHTML = 'Have any account? <a href="#" id="toggleLink">Sign in</a>';
+            } else {
+                formTitle.textContent = 'Sign in to your account';
+                formSubtitle.textContent = 'Welcome back! Please sign in.';
+                fullnameInput.style.display = 'none';
+                fullnameInput.required = false;
+                toggleText.innerHTML = 'Don\'t have an account? <a href="#" id="toggleLink">Sign up</a>';
+            }
+            // Re-attach event listener to new link
+            document.getElementById('toggleLink').addEventListener('click', arguments.callee);
+        });
+
+        // Google Sign-In logic
+        const googleBtn = document.getElementById('googleSignInBtn');
+        googleBtn.addEventListener('click', function() {
+            google.accounts.id.initialize({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID', // TODO: Replace with your real client ID
+                callback: handleGoogleCredentialResponse
+            });
+            google.accounts.id.prompt();
+        });
+        function handleGoogleCredentialResponse(response) {
+            // Decode JWT to get email (for demo only, in production verify on backend)
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            document.getElementById('google_email').value = payload.email;
+            // Submit the form with Google email
+            document.getElementById('authForm').submit();
+        }
+    </script>
+    {% if session.get('user_email') %}
+    <script>window.location.href = '/chat';</script>
+    {% endif %}
+</body>
+</html> 

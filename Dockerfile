@@ -10,5 +10,8 @@ RUN python -m venv /opt/venv && \
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Example start command (change to your app's main file if needed)
-# CMD ["python", "main.py"]
+# Expose the port the app runs on
+EXPOSE 5000
+
+# Command to run the application
+CMD ["python", "app.py"]
